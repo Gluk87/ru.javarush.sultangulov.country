@@ -16,11 +16,13 @@ public class Country {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "code")
     private String code;
 
     @Column(name = "code_2")
     private String alternativeCode;
 
+    @Column(name = "name")
     private String name;
 
     @Column(name = "continent")

@@ -8,6 +8,6 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CountryResponse extends Response {
-    private List<CountryDto> data = new ArrayList<>();
+public class CityResponse extends Response {
+    private List<CityDto> data = new ArrayList<>();
 }

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Response {
-    private String status;
-    private String statusDescription;
+public class CityRequest {
+    private Integer maxItems;
+    private Integer offset;
 }
