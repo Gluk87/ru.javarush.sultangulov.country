@@ -6,10 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.javarush.country.entity.CityRequest;
-import ru.javarush.country.entity.CityResponse;
-import ru.javarush.country.entity.CountryRequest;
-import ru.javarush.country.entity.CountryResponse;
+import ru.javarush.country.entity.request.CityByIdRequest;
+import ru.javarush.country.entity.request.CityRequest;
+import ru.javarush.country.entity.request.CountryRequest;
+import ru.javarush.country.entity.response.CityByIdResponse;
+import ru.javarush.country.entity.response.CityResponse;
+import ru.javarush.country.entity.response.CountResponse;
+import ru.javarush.country.entity.response.CountryResponse;
 import ru.javarush.country.service.CityService;
 import ru.javarush.country.service.CountryService;
 
@@ -32,5 +35,15 @@ public class AppController {
     @PostMapping(value = "/cities", produces = "application/json")
     public ResponseEntity<CityResponse> getCities(@RequestBody CityRequest request) {
         return new ResponseEntity<>(cityService.getCities(request), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/count", produces = "application/json")
+    public ResponseEntity<CountResponse> getCount() {
+        return new ResponseEntity<>(cityService.getCount(), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/city", produces = "application/json")
+    public ResponseEntity<CityByIdResponse> getCityById(@RequestBody CityByIdRequest request) {
+        return new ResponseEntity<>(cityService.getCityById(request), HttpStatus.OK);
     }
 }

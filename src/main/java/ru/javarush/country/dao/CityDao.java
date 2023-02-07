@@ -27,12 +27,12 @@ public class CityDao {
         }
     }
 
-    public Optional<City> getById(Integer id) {
+    public City getById(Integer id) {
         try(Session session = AppSessionFactory.getSessionFactory().openSession()) {
             Query<City> query = session
                     .createQuery("select c from City c join fetch c.country where c.id = :ID", City.class)
                     .setParameter("ID", id);
-            return Optional.ofNullable(query.getSingleResult());
+            return query.getSingleResult();
         }
     }
 }

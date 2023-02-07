@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javarush.country.dao.CountryDao;
 import ru.javarush.country.entity.*;
+import ru.javarush.country.entity.request.CountryRequest;
+import ru.javarush.country.entity.response.CountryResponse;
 import ru.javarush.country.mapper.CountryMapper;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class CountryServiceImpl implements CountryService {
             List<Country> countryList = countryDao.getAll(request.getMaxItems());
             return countryMapper.convertCountryResponse(countryList);
         } catch (Exception e) {
-            return (CountryResponse) countryMapper.convertError(e);
+            return countryMapper.convertError(e.getMessage());
         }
     }
 

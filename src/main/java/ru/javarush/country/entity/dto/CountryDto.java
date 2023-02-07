@@ -1,4 +1,4 @@
-package ru.javarush.country.entity;
+package ru.javarush.country.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

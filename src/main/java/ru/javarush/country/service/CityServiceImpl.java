@@ -1,13 +1,19 @@
 package ru.javarush.country.service;
 
+import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
 import ru.javarush.country.dao.CityDao;
-import ru.javarush.country.entity.City;
-import ru.javarush.country.entity.CityRequest;
-import ru.javarush.country.entity.CityResponse;
+import ru.javarush.country.entity.*;
+import ru.javarush.country.entity.request.CityByIdRequest;
+import ru.javarush.country.entity.request.CityRequest;
+import ru.javarush.country.entity.response.CityByIdResponse;
+import ru.javarush.country.entity.response.CityResponse;
+import ru.javarush.country.entity.response.CountResponse;
+import ru.javarush.country.exception.CityNotFoundException;
 import ru.javarush.country.mapper.CityMapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CityServiceImpl implements CityService {
@@ -24,7 +30,31 @@ public class CityServiceImpl implements CityService {
             List<City> cityList = cityDao.getItems(request.getOffset(), request.getMaxItems());
             return cityMapper.convertCityResponse(cityList);
         } catch (Exception e) {
-            return (CityResponse) cityMapper.convertError(e);
+            return cityMapper.convertCityResponseError(e.getMessage());
+        }
+    }
+
+    @Override
+    public CountResponse getCount() {
+        try {
+            CityDao cityDao = new CityDao();
+            int totalCount = cityDao.getTotalCount();
+            return cityMapper.convertCountResponse(totalCount);
+        } catch (Exception e) {
+            return cityMapper.convertCountResponseError(e.getMessage());
+        }
+    }
+
+    @Override
+    public CityByIdResponse getCityById(CityByIdRequest request) {
+        try {
+            CityDao cityDao = new CityDao();
+            City city = cityDao.getById(request.getId());
+            return cityMapper.convertCityByIdResponse(city);
+        } catch (NoResultException e) {
+            return cityMapper.convertCityByIdResponseError( "City not found");
+        } catch (Exception e) {
+            return cityMapper.convertCityByIdResponseError(e.getMessage());
         }
     }
 }

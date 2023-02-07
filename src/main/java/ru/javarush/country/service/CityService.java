@@ -1,9 +1,13 @@
 package ru.javarush.country.service;
 
-import org.springframework.stereotype.Service;
-import ru.javarush.country.entity.CityRequest;
-import ru.javarush.country.entity.CityResponse;
+import ru.javarush.country.entity.request.CityByIdRequest;
+import ru.javarush.country.entity.request.CityRequest;
+import ru.javarush.country.entity.response.CityByIdResponse;
+import ru.javarush.country.entity.response.CityResponse;
+import ru.javarush.country.entity.response.CountResponse;
 
 public interface CityService {
     CityResponse getCities(CityRequest request);
+    CountResponse getCount();
+    CityByIdResponse getCityById(CityByIdRequest request);
 }

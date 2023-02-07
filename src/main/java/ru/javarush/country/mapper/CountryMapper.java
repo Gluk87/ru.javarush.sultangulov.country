@@ -2,13 +2,17 @@ package ru.javarush.country.mapper;
 
 import org.springframework.stereotype.Service;
 import ru.javarush.country.entity.*;
+import ru.javarush.country.entity.dto.CountryDto;
+import ru.javarush.country.entity.response.CountryResponse;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static ru.javarush.country.configuration.Constant.*;
+
 @Service
-public class CountryMapper extends Mapper {
+public class CountryMapper {
 
     public CountryResponse convertCountryResponse(List<Country> countryList) {
         CountryResponse response = new CountryResponse();
@@ -43,7 +47,14 @@ public class CountryMapper extends Mapper {
                 .collect(Collectors.toList());
     }
 
-    public String getCityName(City city) {
+    public CountryResponse convertError(String message) {
+        CountryResponse response = new CountryResponse();
+        response.setStatus(STATUS_ERROR);
+        response.setStatusDescription(message);
+        return response;
+    }
+
+    private String getCityName(City city) {
         return (city != null) ? city.getName() : "";
     }
 }
