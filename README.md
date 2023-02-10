@@ -1,11 +1,18 @@
-# Проект по теме: SQL, JDBC, Hibernate (и немного Spring)
+# Project: SQL, JDBC, Hibernate (and some Spring)
 
-Инструкция:
-1) Запустить на Docker БД MySQL;
-2) Загрузить в БД дамп со скриптами;
-3) Запустить клиента для REST-запросов
+Instruction:
+1) Start Database MySQL on Docker:
+   docker run --name mysql -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root --restart unless-stopped -v mysql:/var/lib/mysql mysql:8
+2) Upload a dump with scripts to the Database;
+3) Start Redis:
+   docker run -d --name redis -p 6379:6379 redis:latest
+4) Launch the Application. On startup, it checks the performance of the Database and the Redis:
 
-Примеры запросов (POST):
+![alt text](https://github.com/Gluk87/ru.javarush.sultangulov.country/blob/dev/img/screen_redis.png)
+
+5) Launch client for REST requests (e.g. Insomnia)
+
+Request examples (POST):
 
 http://localhost:8080/countries
 {	

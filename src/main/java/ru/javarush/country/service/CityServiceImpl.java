@@ -1,7 +1,9 @@
 package ru.javarush.country.service;
 
 import jakarta.persistence.NoResultException;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
+import ru.javarush.country.configuration.AppSessionFactory;
 import ru.javarush.country.dao.CityDao;
 import ru.javarush.country.entity.*;
 import ru.javarush.country.entity.request.CityByIdRequest;
@@ -14,6 +16,9 @@ import ru.javarush.country.mapper.CityMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
+import static java.util.Objects.nonNull;
 
 @Service
 public class CityServiceImpl implements CityService {
@@ -55,6 +60,18 @@ public class CityServiceImpl implements CityService {
             return cityMapper.convertCityByIdResponseError( "City not found");
         } catch (Exception e) {
             return cityMapper.convertCityByIdResponseError(e.getMessage());
+        }
+    }
+
+    public void testMysqlData(List<Integer> ids) {
+        try (Session session = AppSessionFactory.getSessionFactory().getCurrentSession()) {
+            session.beginTransaction();
+            CityDao cityDao = new CityDao();
+            for (Integer id : ids) {
+                City city = cityDao.getById(id);
+                Set<CountryLanguage> languages = city.getCountry().getLanguages();
+            }
+            session.getTransaction().commit();
         }
     }
 }

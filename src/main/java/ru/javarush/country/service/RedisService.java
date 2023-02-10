@@ -7,6 +7,7 @@ import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisStringCommands;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import ru.javarush.country.configuration.AppSessionFactory;
@@ -18,6 +19,9 @@ import ru.javarush.country.mapper.RedisMapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.nonNull;
+
+@Slf4j
 @Service
 public class RedisService {
 
@@ -31,7 +35,42 @@ public class RedisService {
         this.mapper = new ObjectMapper();
     }
 
-    public List<CityCountry> preparedData() {
+    public void pushToRedis() {
+        List<CityCountry> cityCountries = preparedData();
+        try (StatefulRedisConnection<String, String> connection = redisClient.connect()) {
+            RedisStringCommands<String, String> sync = connection.sync();
+            for (CityCountry cityCountry : cityCountries) {
+                try {
+                    sync.set(String.valueOf(cityCountry.getId()), mapper.writeValueAsString(cityCountry));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+    public void testRedisData(List<Integer> ids) {
+        try (StatefulRedisConnection<String, String> connection = redisClient.connect()) {
+            RedisStringCommands<String, String> sync = connection.sync();
+            for (Integer id : ids) {
+                String value = sync.get(String.valueOf(id));
+                try {
+                    mapper.readValue(value, CityCountry.class);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void shutdown() {
+        if (nonNull(redisClient)) {
+            redisClient.shutdown();
+        }
+    }
+
+    private List<CityCountry> preparedData() {
         List<City> allCities = fetchData();
         return redisMapper.transformData(allCities);
     }
@@ -49,27 +88,6 @@ public class RedisService {
             }
             session.getTransaction().commit();
             return allCities;
-        }
-    }
-
-    private RedisClient prepareRedisClient() {
-        try (StatefulRedisConnection<String, String> connection = redisClient.connect()) {
-            System.out.println("\nConnected to Redis\n");
-        }
-        return redisClient;
-    }
-
-    private void pushToRedis(List<CityCountry> data) {
-        try (StatefulRedisConnection<String, String> connection = redisClient.connect()) {
-            RedisStringCommands<String, String> sync = connection.sync();
-            for (CityCountry cityCountry : data) {
-                try {
-                    sync.set(String.valueOf(cityCountry.getId()), mapper.writeValueAsString(cityCountry));
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-            }
-
         }
     }
 }
