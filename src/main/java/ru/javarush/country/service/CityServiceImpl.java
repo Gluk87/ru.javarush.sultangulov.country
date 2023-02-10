@@ -11,14 +11,10 @@ import ru.javarush.country.entity.request.CityRequest;
 import ru.javarush.country.entity.response.CityByIdResponse;
 import ru.javarush.country.entity.response.CityResponse;
 import ru.javarush.country.entity.response.CountResponse;
-import ru.javarush.country.exception.CityNotFoundException;
 import ru.javarush.country.mapper.CityMapper;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-
-import static java.util.Objects.nonNull;
 
 @Service
 public class CityServiceImpl implements CityService {

@@ -10,6 +10,7 @@ import ru.javarush.country.mapper.RedisMapper;
 import ru.javarush.country.service.CityService;
 import ru.javarush.country.service.CityServiceImpl;
 import ru.javarush.country.service.RedisService;
+import ru.javarush.country.service.RedisServiceImpl;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class CountryApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         try {
             RedisMapper mapper = new RedisMapper();
-            RedisService redisService = new RedisService(mapper);
+            RedisService redisService = new RedisServiceImpl(mapper);
             redisService.pushToRedis();
 
             List<Integer> ids = List.of(3, 2545, 123, 4, 189, 89, 3458, 1189, 10, 102);

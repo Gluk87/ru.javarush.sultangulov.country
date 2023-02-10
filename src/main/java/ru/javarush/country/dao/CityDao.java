@@ -6,7 +6,6 @@ import ru.javarush.country.configuration.AppSessionFactory;
 import ru.javarush.country.entity.City;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CityDao {
 

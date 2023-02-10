@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.javarush.country.entity.City;
 import ru.javarush.country.entity.Country;
 import ru.javarush.country.entity.CountryLanguage;
-import ru.javarush.country.entity.CityCountry;
+import ru.javarush.country.entity.dto.CityCountry;
 import ru.javarush.country.entity.Language;
 
 import java.util.List;

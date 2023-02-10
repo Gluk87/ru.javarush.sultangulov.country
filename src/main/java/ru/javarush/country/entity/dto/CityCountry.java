@@ -1,7 +1,9 @@
-package ru.javarush.country.entity;
+package ru.javarush.country.entity.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.javarush.country.entity.Continent;
+import ru.javarush.country.entity.Language;
 
 import java.math.BigDecimal;
 import java.util.Set;
