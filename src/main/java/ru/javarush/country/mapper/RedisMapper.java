@@ -1,17 +1,17 @@
 package ru.javarush.country.mapper;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.javarush.country.entity.City;
 import ru.javarush.country.entity.Country;
 import ru.javarush.country.entity.CountryLanguage;
-import ru.javarush.country.entity.dto.CityCountry;
+import ru.javarush.country.dto.CityCountry;
 import ru.javarush.country.entity.Language;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class RedisMapper {
 
     public List<CityCountry> transformData(List<City> cities) {

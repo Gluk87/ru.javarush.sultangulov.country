@@ -1,6 +1,15 @@
 package ru.javarush.country.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,10 +58,10 @@ public class Country {
     private BigDecimal lifeExpectancy;
 
     @Column(name = "gnp")
-    private BigDecimal GNP;
+    private BigDecimal gnp;
 
     @Column(name = "gnpo_id")
-    private BigDecimal GNPOId;
+    private BigDecimal gnpoId;
 
     @Column(name = "local_name")
     private String localName;

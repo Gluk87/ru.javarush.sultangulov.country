@@ -6,12 +6,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import ru.javarush.country.configuration.AppSessionFactory;
-import ru.javarush.country.entity.dto.CityDto;
-import ru.javarush.country.entity.dto.CountryDto;
-import ru.javarush.country.entity.request.CityByIdRequest;
-import ru.javarush.country.entity.request.CityRequest;
-import ru.javarush.country.entity.request.CountryRequest;
+import ru.javarush.country.configuration.HibernateConfiguration;
+import ru.javarush.country.dao.CityHibernateDao;
+import ru.javarush.country.dao.CountryHibernateDao;
+import ru.javarush.country.dto.CityDto;
+import ru.javarush.country.dto.CountryDto;
+import ru.javarush.country.dto.request.CityByIdRequest;
+import ru.javarush.country.dto.request.CityRequest;
+import ru.javarush.country.dto.request.CountryRequest;
 import ru.javarush.country.mapper.CityMapper;
 import ru.javarush.country.mapper.CountryMapper;
 import ru.javarush.country.service.CityService;
@@ -36,12 +38,12 @@ class CountryApplicationTests {
         runSqlScriptFile("src/test/resources/schema.sql");
         runSqlScriptFile("src/test/resources/data.sql");
 
-        cityService = new CityServiceImpl(new CityMapper());
-        countryService = new CountryServiceImpl(new CountryMapper());
+        cityService = new CityServiceImpl(new CityMapper(), new CityHibernateDao());
+        countryService = new CountryServiceImpl(new CountryMapper(), new CountryHibernateDao());
     }
 
     private void runSqlScriptFile(String path) {
-        try(Session session = AppSessionFactory.getSessionFactory().openSession()) {
+        try(Session session = HibernateConfiguration.getSessionFactory().openSession()) {
             String sqlScript = new String(Files.readAllBytes(Paths.get(path)));
             session.beginTransaction();
             Query query = session.createNativeQuery(sqlScript);

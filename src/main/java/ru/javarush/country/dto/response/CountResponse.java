@@ -1,4 +1,4 @@
-package ru.javarush.country.entity.response;
+package ru.javarush.country.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;

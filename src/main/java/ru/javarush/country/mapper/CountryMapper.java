@@ -1,9 +1,9 @@
 package ru.javarush.country.mapper;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.javarush.country.entity.*;
-import ru.javarush.country.entity.dto.CountryDto;
-import ru.javarush.country.entity.response.CountryResponse;
+import ru.javarush.country.dto.CountryDto;
+import ru.javarush.country.dto.response.CountryResponse;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import static ru.javarush.country.configuration.Constant.*;
 
-@Service
+@Component
 public class CountryMapper {
 
     public CountryResponse convertCountryResponse(List<Country> countryList) {

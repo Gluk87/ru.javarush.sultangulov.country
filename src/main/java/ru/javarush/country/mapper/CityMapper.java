@@ -1,18 +1,18 @@
 package ru.javarush.country.mapper;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.javarush.country.entity.*;
-import ru.javarush.country.entity.dto.CityDto;
-import ru.javarush.country.entity.response.CityByIdResponse;
-import ru.javarush.country.entity.response.CityResponse;
-import ru.javarush.country.entity.response.CountResponse;
+import ru.javarush.country.dto.CityDto;
+import ru.javarush.country.dto.response.CityByIdResponse;
+import ru.javarush.country.dto.response.CityResponse;
+import ru.javarush.country.dto.response.CountResponse;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ru.javarush.country.configuration.Constant.*;
-@Service
+@Component
 public class CityMapper {
 
     public CityResponse convertCityResponse(List<City> cityList) {

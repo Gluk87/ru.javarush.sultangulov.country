@@ -1,31 +1,32 @@
 package ru.javarush.country;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.javarush.country.dao.CityHibernateDao;
 import ru.javarush.country.mapper.CityMapper;
-import ru.javarush.country.mapper.RedisMapper;
 import ru.javarush.country.service.CityService;
 import ru.javarush.country.service.CityServiceImpl;
 import ru.javarush.country.service.RedisService;
-import ru.javarush.country.service.RedisServiceImpl;
 
 import java.util.List;
 
 @Slf4j
+@AllArgsConstructor
 @SpringBootApplication
 public class CountryApplication implements ApplicationRunner {
     public static void main(String[] args) {
         SpringApplication.run(CountryApplication.class, args);
     }
 
+    private final RedisService redisService;
+
     @Override
     public void run(ApplicationArguments args) {
         try {
-            RedisMapper mapper = new RedisMapper();
-            RedisService redisService = new RedisServiceImpl(mapper);
             redisService.pushToRedis();
 
             List<Integer> ids = List.of(3, 2545, 123, 4, 189, 89, 3458, 1189, 10, 102);
@@ -35,7 +36,7 @@ public class CountryApplication implements ApplicationRunner {
             long stopRedis = System.currentTimeMillis();
 
             CityMapper cityMapper = new CityMapper();
-            CityService cityService = new CityServiceImpl(cityMapper);
+            CityService cityService = new CityServiceImpl(cityMapper, new CityHibernateDao());
 
             long startMysql = System.currentTimeMillis();
             cityService.testMysqlData(ids);

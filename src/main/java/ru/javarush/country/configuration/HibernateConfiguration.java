@@ -9,12 +9,12 @@ import ru.javarush.country.entity.CountryLanguage;
 import java.util.Properties;
 
 @org.springframework.context.annotation.Configuration
-public class AppSessionFactory {
+public class HibernateConfiguration {
 
-    private static AppSessionFactory instance;
+    private static HibernateConfiguration instance;
     private final SessionFactory sessionFactory;
 
-    public AppSessionFactory() {
+    public HibernateConfiguration() {
         Properties properties = new Properties();
 
         sessionFactory = new Configuration()
@@ -27,7 +27,7 @@ public class AppSessionFactory {
 
     public static SessionFactory getSessionFactory() {
         if (instance == null) {
-            instance = new AppSessionFactory();
+            instance = new HibernateConfiguration();
         }
         return instance.sessionFactory;
     }

@@ -14,19 +14,19 @@ Instruction:
 
 Request examples (POST):
 
-http://localhost:8080/countries
+http://localhost:8080/country/all
 {	
 	"maxItems": 10
 }
 
 
-http://localhost:8080/cities
+http://localhost:8080/city/all
 {	
 	"maxItems": 10,
 	"offset": 10
 }
 
-http://localhost:8080/count
+http://localhost:8080/city/count
 
 http://localhost:8080/city
 {
