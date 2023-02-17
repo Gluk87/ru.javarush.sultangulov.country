@@ -6,10 +6,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.javarush.country.dao.CityHibernateDao;
-import ru.javarush.country.mapper.CityMapper;
 import ru.javarush.country.service.CityService;
-import ru.javarush.country.service.CityServiceImpl;
 import ru.javarush.country.service.RedisService;
 
 import java.util.List;
@@ -23,6 +20,7 @@ public class CountryApplication implements ApplicationRunner {
     }
 
     private final RedisService redisService;
+    private final CityService cityService;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -34,9 +32,6 @@ public class CountryApplication implements ApplicationRunner {
             long startRedis = System.currentTimeMillis();
             redisService.testRedisData(ids);
             long stopRedis = System.currentTimeMillis();
-
-            CityMapper cityMapper = new CityMapper();
-            CityService cityService = new CityServiceImpl(cityMapper, new CityHibernateDao());
 
             long startMysql = System.currentTimeMillis();
             cityService.testMysqlData(ids);
