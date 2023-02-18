@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = "country")
+@EqualsAndHashCode
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor

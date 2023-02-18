@@ -22,7 +22,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = {"country", "city", "languages"})
+@EqualsAndHashCode(exclude = {"city", "languages"})
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor

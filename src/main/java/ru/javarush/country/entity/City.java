@@ -19,7 +19,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "country")
+@EqualsAndHashCode
 @ToString
 @Entity
 @Table(schema = "world", name = "city")
