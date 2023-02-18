@@ -9,4 +9,6 @@ public interface RedisService {
     void testRedisData(List<Integer> ids);
 
     void shutdown();
+
+    void testMysqlData(List<Integer> ids);
 }

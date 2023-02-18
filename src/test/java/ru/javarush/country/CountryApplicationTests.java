@@ -1,12 +1,14 @@
 package ru.javarush.country;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import ru.javarush.country.configuration.HibernateConfiguration;
 import ru.javarush.country.dao.CityHibernateDao;
 import ru.javarush.country.dao.CountryHibernateDao;
 import ru.javarush.country.dto.CityDto;
@@ -14,6 +16,9 @@ import ru.javarush.country.dto.CountryDto;
 import ru.javarush.country.dto.request.CityByIdRequest;
 import ru.javarush.country.dto.request.CityRequest;
 import ru.javarush.country.dto.request.CountryRequest;
+import ru.javarush.country.entity.City;
+import ru.javarush.country.entity.Country;
+import ru.javarush.country.entity.CountryLanguage;
 import ru.javarush.country.mapper.CityMapper;
 import ru.javarush.country.mapper.CountryMapper;
 import ru.javarush.country.service.CityService;
@@ -26,30 +31,42 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Properties;
 
+@Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CountryApplicationTests {
 
-    CityService cityService;
-    CountryService countryService;
+    private final CityService cityService;
+    private final CountryService countryService;
+    private final SessionFactory sessionFactory;
+
+    public CountryApplicationTests() {
+        this.sessionFactory = new Configuration()
+                .addAnnotatedClass(City.class)
+                .addAnnotatedClass(Country.class)
+                .addAnnotatedClass(CountryLanguage.class)
+                .addProperties(new Properties())
+                .buildSessionFactory();
+        this.cityService = new CityServiceImpl(new CityMapper(), new CityHibernateDao(sessionFactory));
+        this.countryService = new CountryServiceImpl(new CountryMapper(), new CountryHibernateDao(sessionFactory));
+    }
 
     @BeforeAll
     void init(){
         runSqlScriptFile("src/test/resources/schema.sql");
         runSqlScriptFile("src/test/resources/data.sql");
-
-        cityService = new CityServiceImpl(new CityMapper(), new CityHibernateDao());
-        countryService = new CountryServiceImpl(new CountryMapper(), new CountryHibernateDao());
     }
 
     private void runSqlScriptFile(String path) {
-        try(Session session = HibernateConfiguration.getSessionFactory().openSession()) {
+        try(Session session = sessionFactory.openSession()) {
             String sqlScript = new String(Files.readAllBytes(Paths.get(path)));
             session.beginTransaction();
             Query query = session.createNativeQuery(sqlScript);
             query.executeUpdate();
             session.getTransaction().commit();
         } catch (IOException e) {
+            log.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }

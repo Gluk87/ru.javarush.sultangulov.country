@@ -1,11 +1,8 @@
 package ru.javarush.country.service;
 
-import jakarta.persistence.NoResultException;
 import lombok.AllArgsConstructor;
-import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.javarush.country.configuration.HibernateConfiguration;
 import ru.javarush.country.dao.CityDao;
 import ru.javarush.country.entity.*;
 import ru.javarush.country.dto.request.CityByIdRequest;
@@ -13,11 +10,13 @@ import ru.javarush.country.dto.request.CityRequest;
 import ru.javarush.country.dto.response.CityByIdResponse;
 import ru.javarush.country.dto.response.CityResponse;
 import ru.javarush.country.dto.response.CountResponse;
+import ru.javarush.country.exception.CityNotFoundException;
 import ru.javarush.country.mapper.CityMapper;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class CityServiceImpl implements CityService {
@@ -48,23 +47,15 @@ public class CityServiceImpl implements CityService {
     @Override
     public CityByIdResponse getCityById(CityByIdRequest request) {
         try {
-            City city = cityDao.getById(request.getId());
-            return cityMapper.convertCityByIdResponse(city);
-        } catch (NoResultException e) {
-            return cityMapper.convertCityByIdResponseError( "City not found");
-        } catch (Exception e) {
-            return cityMapper.convertCityByIdResponseError(e.getMessage());
-        }
-    }
-
-    public void testMysqlData(List<Integer> ids) {
-        try (Session session = HibernateConfiguration.getSessionFactory().getCurrentSession()) {
-            session.beginTransaction();
-            for (Integer id : ids) {
-                City city = cityDao.getById(id);
-                Set<CountryLanguage> languages = city.getCountry().getLanguages();
+            Optional<City> city = cityDao.getById(request.getId());
+            if (city.isPresent()) {
+                return cityMapper.convertCityByIdResponse(city.get());
+            } else {
+                throw new CityNotFoundException("City with id = " + request.getId() + " not found");
             }
-            session.getTransaction().commit();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return cityMapper.convertCityByIdResponseError(e.getMessage());
         }
     }
 }

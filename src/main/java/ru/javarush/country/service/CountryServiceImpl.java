@@ -1,7 +1,6 @@
 package ru.javarush.country.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javarush.country.dao.CountryDao;
 import ru.javarush.country.entity.*;

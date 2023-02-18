@@ -9,17 +9,19 @@ import io.lettuce.core.api.sync.RedisStringCommands;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
-import ru.javarush.country.configuration.HibernateConfiguration;
 import ru.javarush.country.dao.CityDao;
-import ru.javarush.country.dao.CityHibernateDao;
 import ru.javarush.country.entity.City;
 import ru.javarush.country.dto.CityCountry;
+import ru.javarush.country.entity.CountryLanguage;
+import ru.javarush.country.exception.JsonProcessingRuntimeException;
 import ru.javarush.country.mapper.RedisMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Objects.nonNull;
 
@@ -28,9 +30,11 @@ import static java.util.Objects.nonNull;
 @Service
 public class RedisServiceImpl implements RedisService {
 
+    private final SessionFactory sessionFactory;
     private final RedisMapper redisMapper;
     private final RedisClient redisClient;
     private final ObjectMapper objectMapper;
+    private final CityDao cityDao;
     private static final int STEP = 500;
 
     @Override
@@ -42,7 +46,8 @@ public class RedisServiceImpl implements RedisService {
                 try {
                     sync.set(String.valueOf(cityCountry.getId()), objectMapper.writeValueAsString(cityCountry));
                 } catch (JsonProcessingException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage());
+                    throw new JsonProcessingRuntimeException(e.getMessage());
                 }
             }
 
@@ -58,7 +63,8 @@ public class RedisServiceImpl implements RedisService {
                 try {
                     objectMapper.readValue(value, CityCountry.class);
                 } catch (JsonProcessingException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage());
+                    throw new JsonProcessingRuntimeException(e.getMessage());
                 }
             }
         }
@@ -71,15 +77,28 @@ public class RedisServiceImpl implements RedisService {
         }
     }
 
+    @Override
+    public void testMysqlData(List<Integer> ids) {
+        try (Session session = sessionFactory.getCurrentSession()) {
+            session.beginTransaction();
+            for (Integer id : ids) {
+                Optional<City> city = cityDao.getById(id);
+                if (city.isPresent()) {
+                    Set<CountryLanguage> languages = city.get().getCountry().getLanguages();
+                }
+            }
+            session.getTransaction().commit();
+        }
+    }
+
     private List<CityCountry> preparedData() {
         List<City> allCities = fetchData();
         return redisMapper.transformData(allCities);
     }
 
     private List<City> fetchData() {
-        try (Session session = HibernateConfiguration.getSessionFactory().getCurrentSession()) {
+        try (Session session = sessionFactory.getCurrentSession()) {
             List<City> allCities = new ArrayList<>();
-            CityDao cityDao = new CityHibernateDao();
             session.beginTransaction();
 
             int totalCount = cityDao.getTotalCount();

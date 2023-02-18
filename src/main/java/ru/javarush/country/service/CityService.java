@@ -6,8 +6,6 @@ import ru.javarush.country.dto.response.CityByIdResponse;
 import ru.javarush.country.dto.response.CityResponse;
 import ru.javarush.country.dto.response.CountResponse;
 
-import java.util.List;
-
 public interface CityService {
 
     CityResponse getCities(CityRequest request);
@@ -16,5 +14,4 @@ public interface CityService {
 
     CityByIdResponse getCityById(CityByIdRequest request);
 
-    void testMysqlData(List<Integer> ids);
 }

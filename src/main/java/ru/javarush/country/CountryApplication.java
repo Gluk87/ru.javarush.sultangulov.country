@@ -6,7 +6,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.javarush.country.service.CityService;
 import ru.javarush.country.service.RedisService;
 
 import java.util.List;
@@ -20,7 +19,6 @@ public class CountryApplication implements ApplicationRunner {
     }
 
     private final RedisService redisService;
-    private final CityService cityService;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -28,13 +26,12 @@ public class CountryApplication implements ApplicationRunner {
             redisService.pushToRedis();
 
             List<Integer> ids = List.of(3, 2545, 123, 4, 189, 89, 3458, 1189, 10, 102);
-
             long startRedis = System.currentTimeMillis();
             redisService.testRedisData(ids);
             long stopRedis = System.currentTimeMillis();
 
             long startMysql = System.currentTimeMillis();
-            cityService.testMysqlData(ids);
+            redisService.testMysqlData(ids);
             long stopMysql = System.currentTimeMillis();
 
             log.info("Redis: " + (stopRedis - startRedis) + " ms");
