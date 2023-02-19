@@ -15,9 +15,9 @@ import static ru.javarush.country.configuration.Constant.*;
 @Component
 public class CityMapper {
 
-    public CityResponse convertCityResponse(List<City> cityList) {
+    public CityResponse convertCityResponse(List<City> cities) {
         CityResponse response = new CityResponse();
-        List<CityDto> cityDtoList = getCityDtoList(cityList);
+        List<CityDto> cityDtoList = getCityDtoList(cities);
         response.setStatus(STATUS_SUCCESS);
         response.setStatusDescription(STATUS_SUCCESS_DESCR);
         response.setData(cityDtoList);
@@ -62,8 +62,8 @@ public class CityMapper {
         return response;
     }
 
-    private List<CityDto> getCityDtoList(List<City> cityList) {
-        return cityList.stream()
+    private List<CityDto> getCityDtoList(List<City> cities) {
+        return cities.stream()
                 .filter(Objects::nonNull)
                 .map(this::getCityDto)
                 .collect(Collectors.toList());

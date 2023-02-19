@@ -14,29 +14,29 @@ import static ru.javarush.country.configuration.Constant.*;
 @Component
 public class CountryMapper {
 
-    public CountryResponse convertCountryResponse(List<Country> countryList) {
+    public CountryResponse convertCountryResponse(List<Country> countries) {
         CountryResponse response = new CountryResponse();
-        List<CountryDto> countryDtoList = getCountryDtoList(countryList);
+        List<CountryDto> countryDtoList = getCountryDtoList(countries);
         response.setStatus(STATUS_SUCCESS);
         response.setStatusDescription(STATUS_SUCCESS_DESCR);
         response.setData(countryDtoList);
         return response;
     }
 
-    public List<CountryDto> getCountryDtoList(List<Country> countryList) {
-        return countryList.stream()
+    public List<CountryDto> getCountryDtoList(List<Country> countries) {
+        return countries.stream()
                 .filter(Objects::nonNull)
-                .map(data -> new CountryDto(
-                        data.getId(),
-                        data.getCode(),
-                        data.getName(),
-                        data.getContinent().name(),
-                        data.getRegion(),
-                        data.getSurfaceArea(),
-                        data.getPopulation(),
-                        data.getLifeExpectancy(),
-                        getCityName(data.getCity()),
-                        data.getLanguages()
+                .map(country -> new CountryDto(
+                        country.getId(),
+                        country.getCode(),
+                        country.getName(),
+                        country.getContinent().name(),
+                        country.getRegion(),
+                        country.getSurfaceArea(),
+                        country.getPopulation(),
+                        country.getLifeExpectancy(),
+                        getCityName(country.getCity()),
+                        country.getLanguages()
                                 .stream()
                                 .filter(CountryLanguage::getIsOfficial)
                                 .map(CountryLanguage::getLanguage)
